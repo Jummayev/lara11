@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers{{path}};
+
+use App\Models\{{modelName}};
+use Illuminate\Http\Request;
+use App\Http\Requests\{{modelName}}\Store{{modelName}}Request;
+use App\Http\Requests\{{modelName}}\Update{{modelName}}Request;
+use App\Http\Controllers\Controller;
+
+class {{modelName}}Controller extends Controller
+{
+    protected mixed $modelClass = {{modelName}}::class;
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $query = $this->getQuery($request);
+        $data = $query->get();
+
+        return response()->json($data);
+    }
+
+    public function client(Request $request)
+    {
+        $query = $this->getQuery($request);
+        $query->where('status', {{modelName}}::STATUS_ACTIVE);
+        $data = $query->get();
+
+        return response()->json($data);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Store{{modelName}}Request $request)
+    {
+        $data = $request->validated();
+        $model = $this->modelClass::create($data);
+
+        return response()->json($model);
+    }
+
+    /**
+     * Show the specified resource.
+     */
+    public function show(Request $request, int $id)
+    {
+        $query = $this->getQuery($request);
+        $model = $query->firstOrFail($id);
+
+        return response()->json($model);
+    }
+
+    public function clientShow(Request $request, int $id)
+    {
+        $query = $this->getQuery($request);
+        $query->where('status', {{modelName}}::STATUS_ACTIVE);
+        $model = $query->firstOrFail($id);
+
+        return response()->json($model);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Update{{modelName}}Request $request, {{modelName}} ${{smaleModel}})
+    {
+        $data = $request->validated();
+        ${{smaleModel}}->update($data);
+
+        return response()->json(${{smaleModel}});
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request, {{modelName}} ${{smaleModel}})
+    {
+        ${{smaleModel}}->delete();
+
+        return response()->json(${{smaleModel}});
+    }
+
+}
